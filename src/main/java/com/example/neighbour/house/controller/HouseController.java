@@ -3,22 +3,21 @@ package com.example.neighbour.house.controller;
 import com.example.neighbour.house.dto.HouseCreationRequestDto;
 import com.example.neighbour.house.dto.HouseDto;
 import com.example.neighbour.house.dto.HouseUpdateRequestDto;
-import com.example.neighbour.house.model.House;
-import com.example.neighbour.house.repository.HouseRepository;
 import com.example.neighbour.house.service.HouseService;
-import com.example.neighbour.street.dto.StreetUpdateRequestDto;
-import com.example.neighbour.street.model.Street;
 import com.example.neighbour.street.repository.StreetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
+@Validated
 @RestController
 @RequestMapping("api/v1/house")
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class HouseController {
     private final StreetRepository streetRepository;
 
     @PostMapping
-    public ResponseEntity<HouseDto> create(@RequestBody HouseCreationRequestDto request) {
+    public ResponseEntity<HouseDto> create(@Valid @RequestBody HouseCreationRequestDto request) {
         return ResponseEntity.ok(houseService.create(request));
     }
 
@@ -38,8 +37,12 @@ public class HouseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<HouseDto>> getAll() {
-        return ResponseEntity.ok(houseService.getAll(Pageable.unpaged()));
+    public ResponseEntity<Page<HouseDto>> getAll(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return ResponseEntity.ok(houseService.getAll(pageRequest));
     }
 
     @DeleteMapping("{id}")
@@ -49,16 +52,13 @@ public class HouseController {
     }
 
     @PutMapping
-    public ResponseEntity<HouseDto> create(@RequestBody HouseUpdateRequestDto request) {
+    public ResponseEntity<HouseDto> update(@Valid @RequestBody HouseUpdateRequestDto request) {
         return ResponseEntity.ok(houseService.update(request).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
-    @PostMapping("{id}/street/{street_id}")
-    public ResponseEntity<HouseDto> attachStreet(@PathVariable UUID id, @PathVariable UUID street_id) {
-        House entity = getOne(id).getBody().toModel();
-        Street street = streetRepository.getReferenceById(street_id);
-        HouseUpdateRequestDto requestDto = new HouseUpdateRequestDto(entity.setStreet(street));
-        return ResponseEntity.ok(houseService.update(requestDto).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST)));
+    @PostMapping("{id}/street/{streetId}")
+    public ResponseEntity<HouseDto> attachStreet(@PathVariable UUID id, @PathVariable UUID streetId) {
+        return ResponseEntity.ok(houseService.attachStreet(id, streetId));
     }
 }
