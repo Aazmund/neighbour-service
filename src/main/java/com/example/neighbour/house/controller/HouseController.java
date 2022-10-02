@@ -4,7 +4,6 @@ import com.example.neighbour.house.dto.HouseCreationRequestDto;
 import com.example.neighbour.house.dto.HouseDto;
 import com.example.neighbour.house.dto.HouseUpdateRequestDto;
 import com.example.neighbour.house.service.HouseService;
-import com.example.neighbour.street.repository.StreetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.validation.Valid;
 import java.util.UUID;
 

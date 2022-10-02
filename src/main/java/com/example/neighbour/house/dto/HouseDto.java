@@ -4,7 +4,6 @@ import com.example.neighbour.house.model.House;
 import com.example.neighbour.street.dto.StreetDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Data

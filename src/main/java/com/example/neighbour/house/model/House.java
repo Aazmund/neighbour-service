@@ -4,7 +4,6 @@ import com.example.neighbour.street.model.Street;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
