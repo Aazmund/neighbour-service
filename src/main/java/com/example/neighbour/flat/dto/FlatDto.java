@@ -22,4 +22,11 @@ public class FlatDto {
             this.house = new HouseDto(flat.getHouse());
         }
     }
+
+    public Flat toModel() {
+        Flat flat = new Flat();
+        flat.setUid(this.getId());
+        flat.setNumber(this.getNumber());
+        return flat;
+    }
 }
