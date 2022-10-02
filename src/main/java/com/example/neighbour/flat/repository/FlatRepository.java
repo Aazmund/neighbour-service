@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface FlatRepository extends JpaRepository<Flat, UUID> {
+    Boolean existsByNumber(String number);
 }

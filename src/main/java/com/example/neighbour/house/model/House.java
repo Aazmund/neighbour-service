@@ -28,7 +28,3 @@ public class House {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 }
-
-// Spring boot 2. Для профессионалов
-// https://vk.com/wall-111905078_60248
-//

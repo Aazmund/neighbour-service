@@ -23,7 +23,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HouseController {
     private final HouseService houseService;
-    private final StreetRepository streetRepository;
 
     @PostMapping
     public ResponseEntity<HouseDto> create(@Valid @RequestBody HouseCreationRequestDto request) {
@@ -60,5 +59,10 @@ public class HouseController {
     @PostMapping("{id}/street/{streetId}")
     public ResponseEntity<HouseDto> attachStreet(@PathVariable UUID id, @PathVariable UUID streetId) {
         return ResponseEntity.ok(houseService.attachStreet(id, streetId));
+    }
+
+    @PostMapping("{id}/detach")
+    public ResponseEntity<HouseDto> detachStreet(@PathVariable UUID id) {
+        return ResponseEntity.ok(houseService.detachStreet(id));
     }
 }

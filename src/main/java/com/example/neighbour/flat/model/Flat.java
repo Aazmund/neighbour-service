@@ -1,14 +1,18 @@
 package com.example.neighbour.flat.model;
 
-import com.example.neighbour.citizen.model.Citizen;
+import com.example.neighbour.house.model.House;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "flats")
+@SQLDelete(sql = "UPDATE houses SET deleted_at = now() WHERE uid = ?")
+@Where(clause = "deleted_at is null")
 @Data
 public class Flat {
     @Id
@@ -17,7 +21,10 @@ public class Flat {
 
     private String number;
 
-    @OneToMany(mappedBy = "flat")
-    private Set<Citizen> citizens;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "house_uid")
+    private House house;
 
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 }
