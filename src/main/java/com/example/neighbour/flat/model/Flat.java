@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "flats")
-@SQLDelete(sql = "UPDATE houses SET deleted_at = now() WHERE uid = ?")
+@SQLDelete(sql = "UPDATE flats SET deleted_at = now() WHERE uid = ?")
 @Where(clause = "deleted_at is null")
 @Data
 public class Flat {
