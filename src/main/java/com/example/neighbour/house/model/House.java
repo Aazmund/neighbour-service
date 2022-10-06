@@ -4,7 +4,6 @@ import com.example.neighbour.street.model.Street;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
@@ -28,7 +27,3 @@ public class House {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 }
-
-// Spring boot 2. Для профессионалов
-// https://vk.com/wall-111905078_60248
-//

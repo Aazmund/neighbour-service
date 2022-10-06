@@ -3,7 +3,6 @@ package com.example.neighbour.street.dto;
 import com.example.neighbour.street.model.Street;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Data
