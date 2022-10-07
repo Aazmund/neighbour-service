@@ -2,6 +2,7 @@ package com.example.neighbour.citizen.controller;
 
 import com.example.neighbour.citizen.dto.CitizenCreationRequestDto;
 import com.example.neighbour.citizen.dto.CitizenDto;
+import com.example.neighbour.citizen.dto.CitizenInfoDto;
 import com.example.neighbour.citizen.dto.CitizenUpdateRequestDto;
 import com.example.neighbour.citizen.service.CitizenService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,12 @@ public class CitizenController {
     public ResponseEntity<CitizenDto> getOne(@PathVariable UUID id) {
         return ResponseEntity.ok(citizenService.getById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+
+    @GetMapping("/{id}/info")
+    public ResponseEntity<CitizenInfoDto> getInfoById(@PathVariable UUID id) {
+        return ResponseEntity.ok(new CitizenInfoDto(citizenService.getById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND))));
     }
 
     @GetMapping

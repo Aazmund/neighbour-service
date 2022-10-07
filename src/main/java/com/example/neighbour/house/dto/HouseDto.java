@@ -14,12 +14,15 @@ public class HouseDto {
 
     StreetDto street;
 
+    Integer totalFlats;
+
     public HouseDto(House house) {
         this.id = house.getUid();
         this.number = house.getNumber();
 
         if (house.getStreet() != null) {
             this.street = new StreetDto(house.getStreet());
+            this.totalFlats = house.getFlats().size();
         }
     }
 

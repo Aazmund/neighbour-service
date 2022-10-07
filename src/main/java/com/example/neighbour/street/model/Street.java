@@ -1,10 +1,10 @@
 package com.example.neighbour.street.model;
 
+import com.example.neighbour.house.model.House;
 import lombok.Data;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,4 +16,7 @@ public class Street {
     UUID uid;
 
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "street")
+    private List<House> houses;
 }

@@ -14,12 +14,18 @@ public class FlatDto {
     String number;
     HouseDto house;
 
+    Integer totalCitizens;
+
     public FlatDto(Flat flat){
         this.id = flat.getUid();
         this.number = flat.getNumber();
 
-        if (house.getStreet() != null) {
+        if (flat.getHouse() != null) {
             this.house = new HouseDto(flat.getHouse());
+        }
+
+        if (flat.getCitizens() != null) {
+            this.totalCitizens = flat.getCitizens().size();
         }
     }
 

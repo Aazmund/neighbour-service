@@ -11,9 +11,15 @@ public class StreetDto {
     UUID id;
     String name;
 
+    Integer totalHouses;
+
     public StreetDto(Street street){
         this.id = street.getUid();
         this.name = street.getName();
+
+        if (street.getHouses() != null) {
+            this.totalHouses = street.getHouses().size();
+        }
     }
 
     public Street toModel(){

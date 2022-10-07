@@ -1,11 +1,13 @@
 package com.example.neighbour.house.model;
 
+import com.example.neighbour.flat.model.Flat;
 import com.example.neighbour.street.model.Street;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,9 +22,12 @@ public class House {
 
     private String number;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "street_uid")
     private Street street;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "house")
+    private List<Flat> flats;
 
     @Column(name = "deleted_at")
     private Instant deletedAt;

@@ -1,0 +1,1 @@
+ALTER TABLE citizens ALTER COLUMN flat_uid DROP NOT NULL
