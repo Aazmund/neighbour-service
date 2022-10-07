@@ -2,11 +2,14 @@ package com.example.neighbour.citizen.service;
 
 import com.example.neighbour.citizen.dto.CitizenCreationRequestDto;
 import com.example.neighbour.citizen.dto.CitizenDto;
+import com.example.neighbour.citizen.dto.CitizenInfoDto;
 import com.example.neighbour.citizen.dto.CitizenUpdateRequestDto;
 import com.example.neighbour.citizen.model.Citizen;
 import com.example.neighbour.citizen.repository.CitizenRepository;
 import com.example.neighbour.flat.dto.FlatDto;
 import com.example.neighbour.flat.service.FlatService;
+import com.example.neighbour.house.dto.HouseDto;
+import com.example.neighbour.street.dto.StreetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

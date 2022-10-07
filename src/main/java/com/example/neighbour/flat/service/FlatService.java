@@ -26,7 +26,7 @@ public class FlatService {
 
     public FlatDto create(FlatCreationRequestDto flat){
         if (flatRepository.existsByNumber(flat.getNumber())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "");
         }
         Flat model = flatRepository.save(flat.toModel());
         return new FlatDto(model);
