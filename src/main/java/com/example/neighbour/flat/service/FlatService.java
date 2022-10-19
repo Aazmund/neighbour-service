@@ -5,7 +5,7 @@ import com.example.neighbour.flat.dto.FlatDto;
 import com.example.neighbour.flat.dto.FlatUpdateRequestDto;
 import com.example.neighbour.flat.model.Flat;
 import com.example.neighbour.flat.repository.FlatRepository;
-import com.example.neighbour.house.dto.HouseDto;
+import com.example.neighbour.house.model.House;
 import com.example.neighbour.house.service.HouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,16 +24,17 @@ public class FlatService {
     private final FlatRepository flatRepository;
     private final HouseService houseService;
 
+    @Transactional
     public FlatDto create(FlatCreationRequestDto flat){
         if (flatRepository.existsByNumber(flat.getNumber())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         Flat model = flatRepository.save(flat.toModel());
         return new FlatDto(model);
     }
 
-    public Optional<FlatDto> getById(UUID uid) {
-        return flatRepository.findById(uid).map(FlatDto::new);
+    public Optional<Flat> getById(UUID uid) {
+        return flatRepository.findById(uid);
     }
 
     public Page<FlatDto> getAll(Pageable pageable) {
@@ -59,13 +60,13 @@ public class FlatService {
     @Transactional
     public FlatDto attachHouse(UUID id, UUID houseId) {
         Flat flat = flatRepository.getReferenceById(id);
-        Optional<HouseDto> house = houseService.getById(houseId);
+        Optional<House> house = houseService.getById(houseId);
 
         if (house.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        flat.setHouse(house.get().toModel());
+        flat.setHouse(house.get());
 
         return new FlatDto(flatRepository.saveAndFlush(flat));
     }

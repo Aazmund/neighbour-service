@@ -3,7 +3,9 @@ package com.example.neighbour.house.model;
 import com.example.neighbour.flat.model.Flat;
 import com.example.neighbour.street.model.Street;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.time.Instant;
@@ -31,4 +33,12 @@ public class House {
 
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Instant updatedAt;
 }

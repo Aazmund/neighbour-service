@@ -5,7 +5,7 @@ import com.example.neighbour.house.dto.HouseDto;
 import com.example.neighbour.house.dto.HouseUpdateRequestDto;
 import com.example.neighbour.house.model.House;
 import com.example.neighbour.house.repository.HouseRepository;
-import com.example.neighbour.street.dto.StreetDto;
+import com.example.neighbour.street.model.Street;
 import com.example.neighbour.street.service.StreetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +32,8 @@ public class HouseService {
         return new HouseDto(model);
     }
 
-    public Optional<HouseDto> getById(UUID uid) {
-        return houseRepository.findById(uid).map(HouseDto::new);
+    public Optional<House> getById(UUID uid) {
+        return houseRepository.findById(uid);
     }
 
     public Page<HouseDto> getAll(Pageable pageable) {
@@ -59,13 +59,13 @@ public class HouseService {
     @Transactional
     public HouseDto attachStreet(UUID id, UUID streetId) {
         House house = houseRepository.getReferenceById(id);
-        Optional<StreetDto> street = streetService.getById(streetId);
+        Optional<Street> street = streetService.getById(streetId);
 
         if (street.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        house.setStreet(street.get().toModel());
+        house.setStreet(street.get());
 
         return new HouseDto(houseRepository.saveAndFlush(house));
     }

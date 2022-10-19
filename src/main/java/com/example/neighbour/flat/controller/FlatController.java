@@ -7,6 +7,8 @@ import com.example.neighbour.flat.service.FlatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,17 +31,12 @@ public class FlatController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FlatDto> getOne(@PathVariable UUID id) {
-        return ResponseEntity.ok(flatService.getById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(flatService.getById(id).map(FlatDto::new));
     }
 
     @GetMapping
-    public ResponseEntity<Page<FlatDto>> getAll(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
-    ) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return ResponseEntity.ok(flatService.getAll(pageRequest));
+    public ResponseEntity<Page<FlatDto>> getAll( @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(flatService.getAll(pageable));
     }
 
     @DeleteMapping("{id}")
@@ -50,8 +47,7 @@ public class FlatController {
 
     @PutMapping
     public ResponseEntity<FlatDto> update(@Valid @RequestBody FlatUpdateRequestDto request) {
-        return ResponseEntity.ok(flatService.update(request).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(flatService.update(request));
     }
 
     @PostMapping("{id}/house/{houseId}")

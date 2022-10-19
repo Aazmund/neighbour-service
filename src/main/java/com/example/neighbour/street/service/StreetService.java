@@ -30,8 +30,8 @@ public class StreetService {
         return new StreetDto(model);
     }
 
-    public Optional<StreetDto> getById(UUID uid) {
-        return streetRepository.findById(uid).map(StreetDto::new);
+    public Optional<Street> getById(UUID uid) {
+        return streetRepository.findById(uid);
     }
 
     public Page<StreetDto> getAll(Pageable pageable) {

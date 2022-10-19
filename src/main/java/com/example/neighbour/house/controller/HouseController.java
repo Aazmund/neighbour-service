@@ -7,6 +7,8 @@ import com.example.neighbour.house.service.HouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,17 +31,12 @@ public class HouseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<HouseDto> getOne(@PathVariable UUID id) {
-        return ResponseEntity.ok(houseService.getById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(houseService.getById(id).map(HouseDto::new));
     }
 
     @GetMapping
-    public ResponseEntity<Page<HouseDto>> getAll(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
-    ) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return ResponseEntity.ok(houseService.getAll(pageRequest));
+    public ResponseEntity<Page<HouseDto>> getAll( @PageableDefault(size=20) Pageable pageable ) {
+        return ResponseEntity.ok(houseService.getAll(pageable));
     }
 
     @DeleteMapping("{id}")
@@ -50,8 +47,7 @@ public class HouseController {
 
     @PutMapping
     public ResponseEntity<HouseDto> update(@Valid @RequestBody HouseUpdateRequestDto request) {
-        return ResponseEntity.ok(houseService.update(request).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(houseService.update(request));
     }
 
     @PostMapping("{id}/street/{streetId}")

@@ -7,11 +7,10 @@ import com.example.neighbour.citizen.dto.CitizenUpdateRequestDto;
 import com.example.neighbour.citizen.service.CitizenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -29,23 +28,17 @@ public class CitizenController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CitizenDto> getOne(@PathVariable UUID id) {
-        return ResponseEntity.ok(citizenService.getById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(citizenService.getById(id).map(CitizenDto::new));
     }
 
     @GetMapping("/{id}/info")
     public ResponseEntity<CitizenInfoDto> getInfoById(@PathVariable UUID id) {
-        return ResponseEntity.ok(new CitizenInfoDto(citizenService.getById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND))));
+        return ResponseEntity.of(citizenService.getById(id).map(CitizenDto::new).map(CitizenInfoDto::new));
     }
 
     @GetMapping
-    public ResponseEntity<Page<CitizenDto>> getAll(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
-    ) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return ResponseEntity.ok(citizenService.getAll(pageRequest));
+    public ResponseEntity<Page<CitizenDto>> getAll(@PageableDefault(size=20) Pageable pageable) {
+        return ResponseEntity.ok(citizenService.getAll(pageable));
     }
 
     @DeleteMapping("{id}")
@@ -56,8 +49,7 @@ public class CitizenController {
 
     @PutMapping
     public ResponseEntity<CitizenDto> create(@RequestBody CitizenUpdateRequestDto request) {
-        return ResponseEntity.ok(citizenService.update(request).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        return ResponseEntity.of(citizenService.update(request));
     }
 
     @PostMapping("{id}/flat/{flatId}")

@@ -2,14 +2,11 @@ package com.example.neighbour.citizen.service;
 
 import com.example.neighbour.citizen.dto.CitizenCreationRequestDto;
 import com.example.neighbour.citizen.dto.CitizenDto;
-import com.example.neighbour.citizen.dto.CitizenInfoDto;
 import com.example.neighbour.citizen.dto.CitizenUpdateRequestDto;
 import com.example.neighbour.citizen.model.Citizen;
 import com.example.neighbour.citizen.repository.CitizenRepository;
-import com.example.neighbour.flat.dto.FlatDto;
+import com.example.neighbour.flat.model.Flat;
 import com.example.neighbour.flat.service.FlatService;
-import com.example.neighbour.house.dto.HouseDto;
-import com.example.neighbour.street.dto.StreetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,8 +33,8 @@ public class CitizenService {
         return new CitizenDto(model);
     }
 
-    public Optional<CitizenDto> getById(UUID uid) {
-        return citizenRepository.findById(uid).map(CitizenDto::new);
+    public Optional<Citizen> getById(UUID uid) {
+        return citizenRepository.findById(uid);
     }
 
     public Page<CitizenDto> getAll(Pageable pageable) {
@@ -68,13 +63,13 @@ public class CitizenService {
     @Transactional
     public CitizenDto attachFlat(UUID id, UUID flatId) {
         Citizen citizen = citizenRepository.getReferenceById(id);
-        Optional<FlatDto> flat = flatService.getById(flatId);
+        Optional<Flat> flat = flatService.getById(flatId);
 
         if (flat.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        citizen.setFlat(flat.get().toModel());
+        citizen.setFlat(flat.get());
 
         return new CitizenDto(citizenRepository.saveAndFlush(citizen));
     }
